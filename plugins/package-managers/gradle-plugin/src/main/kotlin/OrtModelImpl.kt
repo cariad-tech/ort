@@ -51,6 +51,7 @@ internal class OrtDependencyImpl(
     override val artifactId: String,
     override val version: String,
     override val classifier: String,
+    override val variants: Set<String>,
     override val extension: String,
     override val variants: Set<String>,
     override val dependencies: List<OrtDependency>,
