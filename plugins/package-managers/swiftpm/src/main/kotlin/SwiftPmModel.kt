@@ -16,7 +16,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
- @file:Suppress("MaxLineLength")
+@file:Suppress("MaxLineLength")
 
 package org.ossreviewtoolkit.plugins.packagemanagers.swiftpm
 
