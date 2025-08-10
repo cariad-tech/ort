@@ -87,8 +87,8 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
         return HandlerResults(packages, projectPackage, dependenciesScope, devDependenciesScope)
     }
 
-    override fun getConanDataFile(name: String, version: String, conanStorageDir: File, recipeFolder: String?) =
-        conanStorageDir.resolve("$name/$version/_/_/export/conandata.yml")
+    override fun getConanDataFile(name: String, version: String, user: String, channel: String, conanStorageDir: File, recipeFolder: String?) =
+        conanStorageDir.resolve("$name/$version/${user.ifEmpty {"_"}}/${channel.ifEmpty { "_" }}/export/conandata.yml")
 
     override fun listRemotes(): List<Pair<String, String>> {
         val remoteList = runCatching {
@@ -133,9 +133,11 @@ internal class ConanV1Handler(private val conan: Conan) : ConanVersionHandler {
      */
     private fun parsePackage(pkgInfo: PackageInfoV1, workingDir: File): Package {
         val homepageUrl = pkgInfo.homepage.orEmpty()
+        val user = pkgInfo.user.orEmpty()
+        val channel = pkgInfo.channel.orEmpty()
 
         val id = parsePackageId(pkgInfo, workingDir)
-        val conanData = conan.readConanData(id, conan.conanStoragePath)
+        val conanData = conan.readConanData(id, user, channel,conan.conanStoragePath)
 
         return Package(
             id = id,

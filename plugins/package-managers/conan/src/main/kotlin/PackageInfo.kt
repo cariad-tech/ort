@@ -66,6 +66,8 @@ sealed interface PackageInfo {
 internal data class PackageInfoV1(
     override val author: String? = null,
     override val revision: String? = null,
+    val user: String? = null,
+    val channel: String? = null,
     override val url: String? = null,
     val reference: String? = null,
     val license: List<String> = emptyList(),
@@ -93,6 +95,8 @@ internal data class PackageInfoV2(
     // by the package manager, they are exposed as non-nullable properties.
     val name: String,
     val version: String,
+    val user: String,
+    val channel: String,
     val binaryRemote: String? = null,
     val packageType: PackageType
 ) : PackageInfo
@@ -124,6 +128,8 @@ private data class PackageInfoV2Raw(
                 description = it.description,
                 name = it.name.orEmpty(),
                 version = it.version.orEmpty(),
+                user = it.user.orEmpty(),
+                channel = it.channel.orEmpty(),
                 binaryRemote = it.binaryRemote,
                 packageType = it.packageType
             )
@@ -150,6 +156,8 @@ internal data class PackageV2(
     val description: String?,
     val name: String?,
     val version: String?,
+    val user: String? = null,
+    val channel: String? = null,
     val dependencies: Map<String, DependencyReference>,
     val binaryRemote: String? = null,
     val packageType: PackageType
