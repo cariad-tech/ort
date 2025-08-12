@@ -142,7 +142,7 @@ internal fun List<PythonInspector.Package>.toOrtPackages(): Set<Package> =
             // The package has a namespace property which is currently always empty. Deliberately set the namespace to
             // an empty string here to be consistent with the resolved packages which do not have a namespace property.
             id = id,
-            purl = pkg.purl,
+            purl = pkg.purl ?: "",
             authors = pkg.parties.toAuthors(),
             declaredLicenses = declaredLicenses,
             declaredLicensesProcessed = declaredLicensesProcessed,
