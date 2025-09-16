@@ -41,7 +41,6 @@ interface OrtDependency {
     val groupId: String
     val artifactId: String
     val version: String
-    val variants: Set<String>
     val classifier: String
     val extension: String
     val variants: Set<String>
