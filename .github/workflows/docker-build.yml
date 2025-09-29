@@ -3,7 +3,7 @@ name: Docker Build Cariad Custom
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+-.*-custom$'
+      - '*.*.*-*-custom'
   workflow_dispatch:
 
 env:
