@@ -1,19 +1,18 @@
 name: Docker Build
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
-    branches:
-      - main
     tags:
-      - "[0-9]+.[0-9]+.[0-9]+"
+      - 'custom-*'
   workflow_dispatch:
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false
   REGISTRY: ghcr.io
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   metadata:
@@ -44,11 +43,9 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort
           tags: |
-            type=pep440,pattern={{version}}
-            type=raw,value=${{ steps.get-version.outputs.ORT_VERSION }}
-            type=ref,event=branch
             type=ref,event=tag
-            type=sha
+          flavor: |
+            latest=false
       - name: Extract Metadata for 'ort-minimal' Docker Image
         id: meta-ort-minimal
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
@@ -56,24 +53,22 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-minimal
           tags: |
-            type=pep440,pattern={{version}}
-            type=raw,value=${{ steps.get-version.outputs.ORT_VERSION }}
-            type=ref,event=branch
             type=ref,event=tag
-            type=sha
+          flavor: |
+            latest=false
 
   build:
-    name: "Docker Build (${{ matrix.name }})"
+    name: 'Docker Build (${{ matrix.name }})'
     needs: metadata
     strategy:
       matrix:
         include:
-          - os: "ubuntu-24.04"
-            name: "X86"
-          - os: "ubuntu-24.04-arm"
-            name: "ARM64"
+          - os: 'ubuntu-24.04'
+            name: 'X86'
+          - os: 'ubuntu-24.04-arm'
+            name: 'ARM64'
       fail-fast: false
-    runs-on: "${{ matrix.os }}"
+    runs-on: '${{ matrix.os }}'
     env:
       ORT_VERSION: ${{ needs.metadata.outputs.version }}
     steps:
@@ -90,7 +85,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.PLATOSS_GITHUB_TOKEN }}
       - name: Build & Push 'ort' Docker Image
         id: build-ort
         if: ${{ github.event_name != 'pull_request' }}
