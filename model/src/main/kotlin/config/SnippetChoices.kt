@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model.config
 
-import org.ossreviewtoolkit.model.config.snippet.Provenance
+import org.ossreviewtoolkit.model.config.snippet.SnippetProvenance
 import org.ossreviewtoolkit.model.config.snippet.SnippetChoice
 
 /**
@@ -29,7 +29,7 @@ data class SnippetChoices(
     /**
      * The provenance this snippet choice applies to.
      */
-    val provenance: Provenance,
+    val provenance: SnippetProvenance,
 
     /**
      * The snippet choices for this package.
